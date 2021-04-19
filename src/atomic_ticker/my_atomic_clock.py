@@ -1,5 +1,5 @@
 from datetime import datetime
 
 
-def get_time():
+def get_atomic_timestamp():
     return datetime.now()
