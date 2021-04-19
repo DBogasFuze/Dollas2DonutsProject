@@ -1,17 +1,17 @@
-#!/usr/bin/env python3
-
-# NOTE: this example requires PyAudio because it uses the Microphone class
-
 import speech_recognition as sr
 from src.SpeechToText.my_session_manager import SessionManager
+from src.logger import my_logger
 
 
 def do_speech_recognition():
     session_manager = SessionManager("LaSession", "Session Person 1")
     recognizer = get_recognizer()
-    audio = obtain_audio(recognizer)
-    text = recognize_speech(recognizer, audio)
-    session_manager.record_message_to_file(text)
+    text = ""
+    session_stopper = "creative"
+    while not session_stopper in text:
+        audio = obtain_audio(recognizer)
+        text = recognize_speech(recognizer, audio)
+        session_manager.record_message_to_file(text)
 
 
 def get_recognizer():
@@ -25,7 +25,7 @@ def get_microphone():
 def obtain_audio(recognizer):
     # obtain audio from the microphone
     with get_microphone() as source:
-        print("Say something!")
+        my_logger.info("Say something!")
         audio = recognizer.listen(source)
     return audio
 
@@ -34,9 +34,9 @@ def recognize_speech(recognizer, audio):
     # recognize speech using Sphinx
     try:
         recognized_text = recognizer.recognize_sphinx(audio)
-        print("Sphinx thinks you said \"" + recognized_text+"\"")
+        my_logger.info("Sphinx thinks you said \"" + recognized_text + "\"")
         return recognized_text
     except sr.UnknownValueError:
-        print("Sphinx could not understand audio")
+        my_logger.info("Sphinx could not understand audio")
     except sr.RequestError as e:
-        print("Sphinx error; {0}".format(e))
+        my_logger.info("Sphinx error; {0}".format(e))
