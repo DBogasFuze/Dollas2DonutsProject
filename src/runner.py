@@ -1,8 +1,9 @@
-from logger import logger
-
+from logger import my_logger
 
 def main():
-    logger.info("Starting Automated Stenography")
+    my_logger.info("Starting automated Stenography...")
+
+
 
 
 if __name__ == '__main__':
