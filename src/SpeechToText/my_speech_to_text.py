@@ -3,9 +3,7 @@ import speech_recognition as sr
 from src.SpeechToText.my_session_manager import SessionManager
 from src.logger import my_logger
 
-start_recording_word = "record"
-stop_recording_word = "register"
-end_session_word = "direwolf"
+stop_words = "full stop"
 
 
 def do_speech_recognition():
@@ -15,17 +13,14 @@ def do_speech_recognition():
 
 def start_listening():
     session_manager = SessionManager("LaSession", "Session Person 1")
-    recording = False
     recognizer = get_recognizer()
-    audio = obtain_audio(recognizer)
-    text = recognize_speech(recognizer, audio)
-    while not end_session_word in text:
-        if text == start_recording_word:
-            recording = True
-        elif text == stop_recording_word:
-            recording = False
-        if recording:
-            session_manager.record_message_to_file(text)
+    run = True
+    while run:
+        audio = obtain_audio(recognizer)
+        text = recognize_speech(recognizer, audio)
+        session_manager.record_message_to_file(text)
+        if stop_words in text:
+            run = False
 
 
 def get_recognizer():
