@@ -2,6 +2,7 @@ import speech_recognition as sr
 
 from src.SpeechToText.my_session_manager import SessionManager
 from src.logger import my_logger
+from src.atomic_ticker import my_atomic_clock
 
 stop_words = "full stop"
 
@@ -13,14 +14,16 @@ def do_speech_recognition():
 
 def start_listening():
     session_manager = SessionManager("LaSession", "Session Person 1")
-    recognizer = get_recognizer()
     run = True
     while run:
+        recognizer = get_recognizer()
         audio = obtain_audio(recognizer)
         text = recognize_speech(recognizer, audio)
-        session_manager.record_message_to_file(text)
+        timestamp = my_atomic_clock.get_atomic_timestamp()
+        session_manager.record_message(text, timestamp)
         if stop_words in text:
             run = False
+    session_manager.record_all_messages_to_file()
 
 
 def get_recognizer():
