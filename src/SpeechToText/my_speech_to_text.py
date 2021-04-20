@@ -1,27 +1,31 @@
 import speech_recognition as sr
+
 from src.SpeechToText.my_session_manager import SessionManager
 from src.logger import my_logger
-import keyboard
+
+start_recording_word = "record"
+stop_recording_word = "register"
+end_session_word = "direwolf"
 
 
 def do_speech_recognition():
+    my_logger.info("Starting to listen for keys")
+    start_listening()
+
+
+def start_listening():
     session_manager = SessionManager("LaSession", "Session Person 1")
+    recording = False
     recognizer = get_recognizer()
-    text = ""
-    session_start = ' '
-    session_stopper = 'q'
-    while True:
-        try:
-            if keyboard.is_pressed(session_start):
-                audio = obtain_audio(recognizer)
-                text = recognize_speech(recognizer, audio)
-                session_manager.record_message_to_file(text)
-                continue
-            elif keyboard.is_pressed(session_stopper):
-                my_logger.info("Bye!")
-                break
-        except:
-            break
+    audio = obtain_audio(recognizer)
+    text = recognize_speech(recognizer, audio)
+    while not end_session_word in text:
+        if text == start_recording_word:
+            recording = True
+        elif text == stop_recording_word:
+            recording = False
+        if recording:
+            session_manager.record_message_to_file(text)
 
 
 def get_recognizer():
