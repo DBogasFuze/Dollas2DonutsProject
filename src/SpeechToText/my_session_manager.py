@@ -31,7 +31,7 @@ def create_file(path, filename):
 
 
 def append_to_file(filename, message, person_name):
-    my_logger.info("appending message to file")
+    my_logger.info("Appending message to file")
     f = open(filename, "a+")
     f.write(create_message(message, person_name))
 
