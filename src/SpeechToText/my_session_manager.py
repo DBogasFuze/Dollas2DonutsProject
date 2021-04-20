@@ -4,7 +4,7 @@ import os
 from os import sep as separator
 
 
-def create_message(message, person_name, timestamp):
+def create_message(message, timestamp, person_name):
     my_logger.debug("Creating message to record in file")
     timestamp_str = timestamp.strftime("[%Y-%m-%d %H:%M:%S]")
     formatted_msg = timestamp_str + "[" + person_name + "]" + message + "\n"
