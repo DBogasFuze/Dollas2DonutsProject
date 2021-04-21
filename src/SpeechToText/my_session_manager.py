@@ -1,11 +1,10 @@
-from src.atomic_ticker.my_atomic_clock import get_atomic_timestamp
-from src.logger import my_logger
 import os
 from os import sep as separator
 
+from src.logger import my_logger
+
 
 def create_message(message, timestamp, person_name):
-    my_logger.debug("Creating message to record in file")
     timestamp_str = timestamp.strftime("[%Y-%m-%d %H:%M:%S]")
     formatted_msg = timestamp_str + "[" + person_name + "]" + message + "\n"
     return formatted_msg
@@ -30,7 +29,6 @@ def create_file(path, filename):
 
 
 def append_to_file(filename, message, timestamp, person_name):
-    my_logger.info("Appending message to file")
     f = open(filename, "a+")
     f.write(create_message(message, timestamp, person_name))
 
@@ -58,9 +56,9 @@ class SessionManager:
         self.messages[timestamp] = message
 
     def record_all_messages_to_file(self):
+        my_logger.info("Recording all messages to a file")
         for timestamp in self.messages.keys():
             append_to_file(self.file_name, self.messages[timestamp], timestamp, self.person_name)
 
     def record_message_to_file(self, message, timestamp):
-        my_logger.info("Recording message to file")
         append_to_file(self.file_name, message, timestamp, self.person_name)
